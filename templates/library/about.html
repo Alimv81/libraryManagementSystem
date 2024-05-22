@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+	Library management system about page
+{% endblock %}
+
+{% block content_block %}
+    <h2>Library management system about page</h2>
+    <p>
+        this webapp aims to serve the users a free management system and private environment for managing daily tasks.
+        having features such as checking a task as done, viewing done or not done tasks, deleting tasks, updating tasks
+        and can store each task with its title, description, deadline date and a flag for being done status.
+        built and developed by django backend framework.
+    </p>
+    <a href="{% url 'accounts:login' %}">login to use these features</a>
+{% endblock %}

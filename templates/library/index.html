@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+	ToDo WebApp
+{% endblock %}
+
+{% block header_block %}
+	
+{% endblock %}
+
+{% block content_block %}
+	<h1>
+    This is an ToDo WebApp
+    </h1>
+    <p>
+    we have built this app in order for people to be more productive 
+    and more convenient, and yet using this app is totally free!
+    </p>
+    
+    <h2>
+       choose what you're willing to do now:
+    </h2>
+    
+    <ul>
+        <li>
+            <p> <a href={% url 'library:about-page' %}>creating new tasks</a> </p>
+        </li>
+        <li>
+            <p> <a href={% url 'accounts:index' %}>your account</a> </p>
+        </li>
+        <li>
+            <p> <a href={% url 'library:about-page' %}>about this app</a> </p>
+        </li>
+    </ul>
+    
+{% endblock %}
+
+{% block footer_block %}
+	
+{% endblock %}
