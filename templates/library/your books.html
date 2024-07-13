@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+	user profile
+{% endblock %}
+
+{% block content_block %}
+	<h2>
+        list of the books you have borrowed:
+    <a href="{% url 'library:index' %}">main page</a>
+    </h2>
+    
+    <ul>
+        {% for borrow in borrows %}
+        	<li>
+                <p>
+                    {{ borrow.book.title }} - {{ borrow.borrowed_date }}
+                </p>
+                <form method="get" action="{% url 'library:return_book' borrow.book.pk %}">
+                    <button type="submit">return</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

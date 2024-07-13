@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title_block %}
+	available books
+{% endblock %}
+
+{% block content_block %}
+    <a href="{% url 'library:index' %}">main page</a>
+    <ul>
+	{% for available_book in available_books %}
+		<li>
+            <p>
+                {{ available_book.title }}  - {{ available_book.author.user.username }}
+            </p>
+            <form method="get" action="{% url 'library:borrow_book' available_book.pk %}"> 
+                <button type="submit">Borrow</button>
+            </form>
+        </li>
+	{% endfor %}
+	</ul>
+{% endblock %}

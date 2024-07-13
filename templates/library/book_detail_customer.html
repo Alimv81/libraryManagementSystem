@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+    book detail
+{% endblock %}
+
+{% block content_block %}
+    <a href="{% url 'library:index' %}">main page</a>
+    {{ form.as_table }}
+{% endblock %}

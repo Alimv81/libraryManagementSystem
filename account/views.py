@@ -1,4 +1,3 @@
-import datetime
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
@@ -28,16 +27,18 @@ def signup_view(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            role = form.cleaned_data.get('role')
             user = authenticate(username=username, password=raw_password)
-
-            member = Member.objects.create(user=user)
-            member.membership_date = datetime.date.today()
+            role = 'member' if role == '1' else 'author'
+            member = Member.objects.create(user=user, role=role)
             member.save()
-            #
+
+            print(role)
             login(request, user)
             return redirect('library:index')
         else:
             form.add_error(None, 'Invalid username or password')
+            print(form.errors)
             return redirect('accounts:signup')
     else:
         form = SignUpForm()

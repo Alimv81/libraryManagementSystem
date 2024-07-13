@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+	written books
+{% endblock %}
+
+{% block content_block %}
+    <h2>
+        list of books you have written:
+        <a href="{% url 'library:index' %}">main page</a>
+    </h2>
+    <ul>
+	{% for book in written_books %}
+		<li>
+            <p>
+                {{ book.title }} - {{ book.copies }}
+                - 
+                <a href="{% url 'library:edit_book' book.pk %}">edit</a>
+                -
+                <a href="{% url 'library:delete_book' book.pk %}">delete</a>
+            </p>
+        </li>
+	{% endfor %}
+	</ul>
+{% endblock %}

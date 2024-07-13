@@ -3,30 +3,26 @@ from . import models as lib_models
 
 
 class BookForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
-    author = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
-    copies = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
-    isbn = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    copies = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    isbn = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = lib_models.Book
-        fields = ('name', 'author', 'number_of_copies')
+        fields = ('title', 'copies', 'isbn')
 
-    def clean_name(self, *args, **kwargs):
-        name = self.cleaned_data.get('name')
-        taken_names = lib_models.Book.objects.filter(name__iexact=name)
-        if taken_names:
-            raise forms.ValidationError(None, 'Book with this name already exists')
-        else:
-            return name
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.get('instance', None)
+        super().__init__(*args, **kwargs)
 
-    def clean_author(self, *args, **kwargs):
-        author = self.cleaned_data.get('author')
-        authors = lib_models.Author.objects.filter(name__iexact=author)
-        if authors:
-            return author
-        else:
-            raise forms.ValidationError(None, 'Author with this name does not exist')
+    def clean_title(self, *args, **kwargs):
+        title = self.cleaned_data.get('title')
+        books_with_same_title = lib_models.Book.objects.filter(title__iexact=title)
+        if self.instance:
+            books_with_same_title = books_with_same_title.exclude(pk=self.instance.pk)
+        if books_with_same_title.exists():
+            raise forms.ValidationError('Book with same title is already taken')
+        return title
 
     def clean_copies(self, *args, **kwargs):
         copies = self.cleaned_data.get('copies')
@@ -37,32 +33,17 @@ class BookForm(forms.ModelForm):
 
     def clean_isbn(self, *args, **kwargs):
         isbn = self.cleaned_data.get('isbn')
+        books_with_same_isbn = lib_models.Book.objects.filter(isbn=isbn)
+        if self.instance:
+            books_with_same_isbn = books_with_same_isbn.exclude(pk=self.instance.pk)
+        if books_with_same_isbn.exists():
+            raise forms.ValidationError(None, 'Book with this ISBN already exists')
         for ch in isbn:
             if not ch.isdigit():
                 raise forms.ValidationError(None, 'Invalid ISBN')
         return isbn
 
 
-class AuthorForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'disabled': 'disabled'}))
 
-    class Meta:
-        model = lib_models.Author
-        fields = ('name', 'email')
 
-    def clean_name(self, *args, **kwargs):
-        name = self.cleaned_data.get('name')
-        taken_names = lib_models.Author.objects.filter(name__iexact=name)
-        if taken_names:
-            raise forms.ValidationError(None, 'Author with this name already exists')
-        else:
-            return name
 
-    def clean_email(self, *args, **kwargs):
-        email = self.cleaned_data.get('email')
-        emails = lib_models.Author.objects.filter(email__iexact=email)
-        if emails:
-            return forms.ValidationError(None, 'Author with this email already exists')
-        else:
-            return email

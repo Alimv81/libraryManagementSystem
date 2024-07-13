@@ -10,28 +10,39 @@
 
 {% block content_block %}
 	<h1>
-    This is an ToDo WebApp
+    Library Management webapp index page
     </h1>
-    <p>
-    we have built this app in order for people to be more productive 
-    and more convenient, and yet using this app is totally free!
-    </p>
     
     <h2>
        choose what you're willing to do now:
     </h2>
     
     <ul>
+    {% if member.role == 'member' %}
         <li>
-            <p> <a href={% url 'library:about-page' %}>creating new tasks</a> </p>
+            <p> <a href={% url 'library:show_books' %}>borrow book</a> </p>
         </li>
+        <li>
+            <p> <a href={% url 'library:borrowed_books' %}>your books</a> </p>
+        </li>
+    {% else %}
+        <li>
+            <p> <a href={% url 'library:add_book' %}>add book</a> </p>
+        </li>
+        <li>
+            <p> <a href={% url 'library:written_books' %}>your books</a> </p>
+        </li>
+        
+    {% endif %}
+    
         <li>
             <p> <a href={% url 'accounts:index' %}>your account</a> </p>
         </li>
         <li>
-            <p> <a href={% url 'library:about-page' %}>about this app</a> </p>
+            <p> <a href={% url 'library:about-page' %}>about the webapp</a> </p>
         </li>
     </ul>
+   
     
 {% endblock %}
 

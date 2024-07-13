@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+	add book
+{% endblock %}
+
+{% block content_block %}
+    <form method="post" action=""> {% csrf_token %}
+    	{{ form.as_p }}
+        <button type="submit">submit</button>
+        <a href="{% url 'library:index' %}">main page</a>
+    </form>
+{% endblock %}
